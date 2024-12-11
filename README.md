@@ -93,3 +93,22 @@ CREATE TABLE `book` (
   KEY `genre` (`genre`),
   CONSTRAINT `book_ibfk_1` FOREIGN KEY (`genre`) REFERENCES `genre` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+```
+
+## Technologies Used
+- **Spring Boot**: For building the REST API.
+- **JPA**: For data persistence.
+- **MySQL**: Database management.
+- **Spring Security**: For authentication and authorization.
+
+## How to Run
+- Clone the repository:
+git clone https://github.com/your-username/library-api.git
+
+- Set up the MySQL database and configure the application.properties with your database credentials.
+
+- Run the Spring Boot application:
+mvn spring-boot:run
+
+- Access the API at:
+http://localhost:8080/api
