@@ -1,81 +1,69 @@
 package com.training.restLibrary.exception;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.training.restLibrary.utils.ResponseFormat;
+
 
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
+	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+	
 	// Handle BookNotFoundException
     @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<ErrorResponseFormat> handleBookNotFound(BookNotFoundException ex) {
-        // Return a custom error message with HTTP status 404 (Not Found)
-    	var error = new ErrorResponseFormat();
+    public ResponseEntity<ResponseFormat> handleBookNotFound(BookNotFoundException ex) {
+    	logger.warn("Book not found: {}", nullCheck(ex.getMessage()));
     	
-    	error.setStatus(HttpStatus.NOT_FOUND.value());
-    	error.setMessage(ex.getMessage());
-    	error.setTimeStamp(System.currentTimeMillis());
-    	
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    	// Return a custom error message with HTTP status 404 (Not Found)
+        return ResponseFormat.buildResponse(HttpStatus.NOT_FOUND, nullCheck(ex.getMessage()));
+    }
+    
+    // Handle User name already exists
+    @ExceptionHandler(UsernameTakenException.class)
+    public ResponseEntity<ResponseFormat> handleUsernameTakenException(UsernameTakenException ex) {
+    	logger.info("Username conflict: {}", nullCheck(ex.getMessage()));
+    	// Handle UsernameTakenException (HTTP 409 - Conflict)
+        return ResponseFormat.buildResponse(HttpStatus.CONFLICT, nullCheck(ex.getMessage()));
+    }
+    
+    // Handle User name not Found
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ResponseFormat> handleUserNotFoundException(UserNotFoundException ex) {
+    	logger.warn("User not found: {}", nullCheck(ex.getMessage()));
+        return ResponseFormat.buildResponse(HttpStatus.NOT_FOUND, nullCheck(ex.getMessage()));
     }
 
     // Handle any other generic exceptions
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseFormat> handleGenericException(Exception ex) {
-        // Return a custom error message with HTTP status 500 (Internal Server Error)
-        var error = new ErrorResponseFormat();
+    public ResponseEntity<ResponseFormat> handleGenericException(Exception ex) {
         
-        error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());  
-        error.setMessage("An unexpected error occurred. Please try again later.");
-        error.setTimeStamp(System.currentTimeMillis());
-        
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    	// Log the error and return a generic message to the user.
+    	logger.error("Unexpected error occurred: {}", ex.getMessage(), ex);
+    	
+    	String message = "An unexpected error occurred. Please try again later.";
+    	
+    	// Return a custom error message with HTTP status 500 (Internal Server Error)
+        return ResponseFormat.buildResponse(HttpStatus.INTERNAL_SERVER_ERROR,message);
+    }
+    
+    private String nullCheck(String message) {
+    	if (!StringUtils.hasText(message)) {
+    		return "An error occurred. Please contact the administrator.";
+    	}
+    	return message;
     }
 }
 
 
-// To format error message as JSON body
-class ErrorResponseFormat{
-	private int status;
-	private String message;
-	private long timeStamp;
-	
-	public ErrorResponseFormat() {
 
-	}
-
-	public ErrorResponseFormat(int status, String message, long timeStamp) {
-		this.status = status;
-		this.message = message;
-		this.timeStamp = timeStamp;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public long getTimeStamp() {
-		return timeStamp;
-	}
-
-	public void setTimeStamp(long timeStamp) {
-		this.timeStamp = timeStamp;
-	}
 
 	
-}
+
