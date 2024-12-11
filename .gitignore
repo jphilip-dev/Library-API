@@ -1,3 +1,14 @@
+# Database configuration
+db.properties
+
+# Eclipse
+*.class
+*.project
+*.classpath
+.settings/
+
+
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
