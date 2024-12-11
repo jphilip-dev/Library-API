@@ -6,6 +6,7 @@ This is a simple Library Management System REST API built using Spring Boot. It 
 
 - **User Registration**: Users can register and await approval by the administrator.
 - **Book Management**: Administrators can add, update, and delete books.
+                       while Users(Role) is limited to view only
 - **User Management**: Administrators can view and update user details.
 - **Access Control**: Certain endpoints are only accessible to authenticated administrators.
 
