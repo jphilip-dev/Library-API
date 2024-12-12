@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.training.restLibrary.entity.Book;
-import com.training.restLibrary.security.entity.Role;
 import com.training.restLibrary.security.entity.User;
 import com.training.restLibrary.security.service.UserService;
 import com.training.restLibrary.service.BookService;
+import com.training.restLibrary.utils.BcryptUtil;
 import com.training.restLibrary.utils.ResponseFormat;
 
 import jakarta.annotation.PostConstruct;
@@ -58,6 +58,7 @@ public class BookRestController {
 		//validate user fields -- placeholder
 		
 		user.setActive(false); // set to false. Administrator will toggle this 
+		user.setPassword("{bcrypt}"+BcryptUtil.encodeText(user.getPassword()));
 		
 		userService.saveUser(user);
 		
@@ -118,13 +119,6 @@ public class BookRestController {
 		return userService.findUserByUserId(userId);
 	}
 	
-	
-	// Access Denied
-	@GetMapping("/access-denied")
-	public ResponseEntity<ResponseFormat> showAccessDenied() {
-		
-		return ResponseFormat.buildResponse(HttpStatus.UNAUTHORIZED, "Access denied!!");
-	}
 	
 	
 }
