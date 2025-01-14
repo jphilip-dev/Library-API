@@ -70,6 +70,7 @@ public class MyUserServiceImpl implements  MyUserService {
 				.username(username)
 				.password(myUser.getPassword())
 				.roles(getRoles(myUser.getRoles()))
+				.disabled(!myUser.getStatus())
 				.build();
 		
 	}
