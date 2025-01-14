@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.phils.library.dto.BookDTO;
 import com.phils.library.entity.Book;
+import com.phils.library.exception.BookNotFoundException;
 import com.phils.library.repository.BookRepository;
 
 @Service
@@ -25,7 +26,7 @@ public class BookServiceImpl implements BookService{
 
 	@Override
 	public BookDTO findBookById(Integer bookId) {
-		Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Find error: Book not found")); //placeholder exception
+		Book book = bookRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException("Cannot find Book with id: " + bookId)); 
 		return BookDTO.fromEntity(book);
 	}
 
@@ -47,7 +48,7 @@ public class BookServiceImpl implements BookService{
 		Book book = BookDTO.toEntity(bookDTO);
 		
 		if (!isExisting(bookId)) {
-			throw new IllegalArgumentException("Update error: Book not found");//placeholder exception
+			throw new BookNotFoundException("Cannot update non existing Book id: "+ bookId);
 		}
 		
 		book.setId(bookId);
@@ -60,7 +61,7 @@ public class BookServiceImpl implements BookService{
 	    Book book = bookRepository.findById(bookId).orElse(null);
 
 	    if (book == null) {
-	        throw new IllegalArgumentException("Delete error: Book not found");
+	        throw new BookNotFoundException("Cannot delete non existing Book id: "+ bookId);
 	    }
 	    bookRepository.delete(book);
 	}

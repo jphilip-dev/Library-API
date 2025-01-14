@@ -34,4 +34,18 @@ public class GlobalExceptionHandler {
         
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+    
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleBookNotFoundException(BookNotFoundException ex) {
+    	
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setTimeStamp(LocalDateTime.now());
+        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        exceptionResponse.setError("Bad Request");
+        exceptionResponse.setMessage(ex.getMessage());
+        
+        
+    	return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+    
 }
