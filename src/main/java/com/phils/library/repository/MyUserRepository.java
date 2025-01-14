@@ -10,7 +10,7 @@ import com.phils.library.entity.MyUser;
 
 public interface MyUserRepository extends JpaRepository<MyUser, Integer>{
 	
-	@Query("SELECT u FROM MyUser u JOIN FETCH u.roles WHERE u.username = :username")
+	@Query("SELECT u FROM MyUser u LEFT JOIN FETCH u.roles WHERE u.username = :username")
 	Optional<MyUser> findByUsernameWithRoles(@Param("username") String username);
 
 }

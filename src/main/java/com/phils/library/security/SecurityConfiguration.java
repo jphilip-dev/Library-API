@@ -26,11 +26,16 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		return httpSecurity.authorizeHttpRequests(registry -> {
+			registry.requestMatchers(HttpMethod.POST, "/security/register").anonymous();
+			
+			registry.requestMatchers("/security/**").hasRole("ADMIN");
+			
 			registry.requestMatchers(HttpMethod.GET, "/api/books", "/api/books/**").hasRole("USER");
 			registry.requestMatchers(HttpMethod.POST, "/api/books").hasRole("ADMIN");
 			registry.requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("ADMIN");
 			registry.requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN");
 			registry.anyRequest().authenticated(); // any other endpoint user needs to be authenticated
+			
 		}).csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Set stateless
 				.httpBasic(httpBasic -> {})// Enable Basic Auth

@@ -1,6 +1,9 @@
 package com.phils.library.entity;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.relation.Role;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -40,6 +43,17 @@ public class MyUser {
 	@OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<UserRole> roles;
 	
+	
+	// convenience method
+	public void addRole(String role) {
+		if (roles == null) {
+			roles = new ArrayList<UserRole>();
+		}
+		UserRole userRole = new UserRole();
+		userRole.setUserId(this.id);
+		userRole.setRole(role);
+		roles.add(userRole);
+	}
 	
 	
 }

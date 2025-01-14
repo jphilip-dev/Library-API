@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.phils.library.entity.MyUser;
 import com.phils.library.entity.UserRole;
+import com.phils.library.exception.UsernameAlreadyExistExeption;
 import com.phils.library.repository.MyUserRepository;
 
 @Service
@@ -32,10 +33,17 @@ public class MyUserServiceImpl implements  MyUserService {
 	@Override
 	public MyUser addUser(MyUser user) {
 		user.setId(null); // explicitly set to null 
+		user.setStatus(false);
+		user.setRoles(null);
 		
-		// check username
-		
-		return myUserRepository.save(user);
+		MyUser checkUser = myUserRepository.findByUsernameWithRoles(user.getUsername()).orElse(null);
+		if (checkUser != null ) {
+			throw new UsernameAlreadyExistExeption("Username already exists");
+		}
+		user = myUserRepository.save(user);
+		user.addRole("USER");
+		user = myUserRepository.save(user);
+		return user;
 	}
 
 	@Override
@@ -49,7 +57,7 @@ public class MyUserServiceImpl implements  MyUserService {
 		
 		// check if user exist
 		MyUser user = myUserRepository.findById(userId)
-					.orElseThrow(() -> new IllegalArgumentException());// placeholder
+					.orElseThrow(() -> new IllegalArgumentException("Delete error: id not Found"));// placeholder
 		
 		myUserRepository.delete(user);
 
