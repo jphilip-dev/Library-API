@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,12 @@ public class LibraryController {
 	BookService bookService;
 	
 	@GetMapping("/books")
-	public List<BookDTO> getBooks() {
+	public List<BookDTO> getBooks(Authentication authentication) {
+		
+		// debugs
+		System.out.println(authentication.getName().toString() );
+		System.out.println(authentication.getAuthorities().toString());
+		
 		return bookService.findAllBooks();
 	}
 	
