@@ -61,6 +61,19 @@ public class GlobalExceptionHandler {
     	return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
     
+    @ExceptionHandler(LoanException.class)
+    public ResponseEntity<ExceptionResponse> handleLoanException(LoanException ex) {
+    	
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setTimeStamp(LocalDateTime.now());
+        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        exceptionResponse.setError("Bad Request");
+        exceptionResponse.setMessage(ex.getMessage());
+        
+        
+    	return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleOtherException(Exception ex) {
     	
@@ -69,7 +82,7 @@ public class GlobalExceptionHandler {
         exceptionResponse.setTimeStamp(LocalDateTime.now());
         exceptionResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         exceptionResponse.setError("Internal Server Error");
-        exceptionResponse.setMessage("Please contact your administrator");
+        exceptionResponse.setMessage("Please contact your administrator..");
         logger.warning("Other Exception - " + ex.getMessage());
     	return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }

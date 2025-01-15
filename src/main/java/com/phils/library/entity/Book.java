@@ -34,5 +34,25 @@ public class Book {
 	
 	@Column(name = "published_date")
 	private LocalDate publishedDate;
+	
+	@Column(name = "copies")
+	private int copies;
+	
+	@Column(name = "on_loan")
+	private int onLoan;
+	
+	public void lend() {
+		if(onLoan >= copies) {
+			throw new IllegalArgumentException("All of " + title + " is on loan");
+		}
+		onLoan ++;
+	}
+	public void returnBook() {
+		if(onLoan <= 0) {
+			throw new IllegalArgumentException("None of " + title + " is on loan");
+		}
+		onLoan --;
+	}
+	
 
 }

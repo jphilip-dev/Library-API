@@ -34,6 +34,13 @@ public class SecurityConfiguration {
 			registry.requestMatchers(HttpMethod.POST, "/api/books").hasRole("ADMIN");
 			registry.requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("ADMIN");
 			registry.requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN");
+			
+			registry.requestMatchers(HttpMethod.GET, "/api/loans", "/api/loans/**").hasRole("USER");
+			registry.requestMatchers(HttpMethod.POST, "/api/loans").hasRole("USER");
+			
+			//registry.requestMatchers(HttpMethod.PUT, "/api/loans/return/**").hasRole("ADMIN");
+			registry.requestMatchers(HttpMethod.DELETE, "/api/loans/**").hasRole("ADMIN");
+			
 			registry.anyRequest().authenticated(); // any other endpoint user needs to be authenticated
 			
 		}).csrf(csrf -> csrf.disable())

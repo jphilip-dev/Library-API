@@ -24,6 +24,10 @@ public class BookDTO {
     @PastOrPresent(message = "Published date must be in the past or present")
     private LocalDate publishedDate;
     
+    private int copies;
+    
+    private int onLoan;
+    
     public static BookDTO fromEntity(Book book) {
     	BookDTO bookDTO = new BookDTO();
     	bookDTO.setId(book.getId());
@@ -31,6 +35,8 @@ public class BookDTO {
     	bookDTO.setAuthor(book.getAuthor());
     	bookDTO.setGenre(book.getGenre());
     	bookDTO.setPublishedDate(book.getPublishedDate());
+    	bookDTO.setCopies(book.getCopies());
+    	bookDTO.setOnLoan(book.getOnLoan());
     	
     	return bookDTO;
     }
