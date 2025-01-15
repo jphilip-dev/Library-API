@@ -47,3 +47,21 @@ The API uses Basic Authentication for all endpoints. A user must be authenticate
 
 ```bash
 curl -u username:password http://localhost:8080/api/books
+```
+
+## Example Response
+
+```json
+[
+  {
+    "id": 1,
+    "title": "Book Title",
+    "author": "Author Name",
+    "genre": "Fiction",
+    "publishedDate": "2022-01-01",
+    "copies": 5,
+    "onLoan": 2
+  },
+  ...
+]
+```
