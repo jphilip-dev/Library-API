@@ -65,3 +65,62 @@ curl -u username:password http://localhost:8080/api/books
   ...
 ]
 ```
+
+## Exception Handling
+
+The application provides global exception handling using `@RestControllerAdvice` to manage exceptions:
+Exceptions are formatted before sending back to the user using ExceptionResponse class
+example:
+```json
+{
+    "timeStamp": "2025-01-15T15:22:03.2594474",
+    "status": 400,
+    "error": "Bad Request",
+    "message": "Exception message"
+}
+```
+
+## Database Schema
+
+The database consists of the following entities:
+
+### **Book**
+- **id**: Integer (Primary Key)
+- **title**: String
+- **author**: String
+- **genre**: String
+- **publishedDate**: LocalDate
+- **copies**: Integer
+- **onLoan**: Integer (Tracks how many books are on loan)
+
+### **Loan**
+- **id**: Integer (Primary Key)
+- **user**: MyUser (Foreign Key)
+- **book**: Book (Foreign Key)
+- **loanDate**: LocalDate
+- **dueDate**: LocalDate
+- **returnedDate**: LocalDate (Nullable)
+
+### **MyUser**
+- **id**: Integer (Primary Key)
+- **username**: String
+- **password**: String
+- **firstName**: String
+- **lastName**: String
+- **status**: Boolean (Activated/Deactivated)
+- **roles**: List of UserRole
+
+### **UserRole**
+- **id**: Integer (Primary Key)
+- **userId**: Integer (Foreign Key)
+- **role**: String (Role such as USER or ADMIN)
+
+## Dependencies
+
+- **Spring Boot**
+- **Spring Security**
+- **Spring Data JPA**
+- **H2 Database** (or any other database of your choice)
+- **Lombok**
+- **BCrypt** for password encoding
+
